@@ -2,7 +2,8 @@
 FROM docker.io/python:3.12.0b1-alpine3.18
 
 #Labels as key value pair
-LABEL Maintainer="NValembois"
+LABEL Maintainer="nvalembois@live.com"
+LABEL org.opencontainers.image.source="https://github.com/nvalembois/gh-pr-auto-approver"
 
 # Any working directory can be chosen as per choice like '/' or '/home' etc
 # i have chosen /usr/app/src
