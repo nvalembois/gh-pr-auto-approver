@@ -8,13 +8,16 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ lowercase(github.repository) }}
 
 jobs:
 
   docker:
     runs-on: ubuntu-latest
     steps:
+      - 
+        name: set IMAGE_NAME
+        run: |
+          echo "IMAGE_NAME=$(echo '${{ github.repository  }}' | tr '[:upper:]' '[:lower:]')" >>${GITHUB_ENV}
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
