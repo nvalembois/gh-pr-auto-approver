@@ -12,15 +12,6 @@ env:
 
 jobs:
 
-  # build:
-
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - name: Build the Docker image
-  #     run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
-
   docker:
     runs-on: ubuntu-latest
     steps:
@@ -38,12 +29,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Extract metadata (tags, labels) for Docker
-      #   id: meta
-      #   uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-      #   with:
-      #     images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
       # - name: Build and push Docker image
       #   uses: docker/build-push-action@v4
       #   with:
@@ -57,4 +42,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: NValembois/PRAutoApprover:latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest # $(date +%s)
