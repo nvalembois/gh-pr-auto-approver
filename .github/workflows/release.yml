@@ -1,0 +1,40 @@
+name: Create release
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches: [ "main" ]
+    paths:
+      - '.github/workflows/release.yml'
+      - '.github/workflows/publish.yml'
+      - '**.py'
+      - 'requirements.txt'
+      - 'Dockerfile'
+
+jobs:
+
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@v4
+      - 
+        name: Push Tag with new version
+        if: github.ref_type != 'tag'
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1 # https://github.com/mathieudutour/github-tag-action
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - 
+        name: Create a GitHub release
+        uses: ncipollo/release-action@v1 # https://github.com/ncipollo/release-action
+        with:
+          tag:  ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}        
