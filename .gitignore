@@ -4,8 +4,7 @@
 *.dll
 *.so
 *.dylib
-main
-gh-pr-approver
+gh-pr-auto-approver
 
 # Test binary, built with `go test -c`
 *.test
