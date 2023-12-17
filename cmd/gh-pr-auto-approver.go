@@ -51,7 +51,7 @@ func main() {
 		Head:        "",
 		Base:        config.GithubBase,
 		Sort:        "created",
-		Direction:   "desc",
+		Direction:   "asc",
 		ListOptions: github.ListOptions{Page: 1, PerPage: 10}}
 	for {
 		if config.Debug {
