@@ -1,4 +1,4 @@
-module github.com/nvalembois/gh-pr-approver
+module github.com/nvalembois/gh-pr-auto-approver
 
 go 1.21.5
 
