@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"net/http"
 	"os"
 	"strings"
 
@@ -25,7 +26,12 @@ func main() {
 		logrus.Debug("Github Token Len:", len(config.GithubToken))
 	}
 
-	client := github.NewClient(nil).WithAuthToken(config.GithubToken)
+	var httpClient *http.Client = nil
+	if config.Debug {
+		httpClient = &http.Client{
+			Transport: &logTransport{http.DefaultTransport}}
+	}
+	client := github.NewClient(httpClient).WithAuthToken(config.GithubToken)
 
 	user, reponame, _ := strings.Cut(config.GithubRepo, "/")
 	ctx := context.Background()
@@ -46,7 +52,7 @@ func main() {
 		Base:        config.GithubBase,
 		Sort:        "created",
 		Direction:   "desc",
-		ListOptions: github.ListOptions{Page: 0, PerPage: 10}}
+		ListOptions: github.ListOptions{Page: 1, PerPage: 10}}
 	for {
 		if config.Debug {
 			logrus.Debugf("Query PR for '%s' with options:", config.GithubRepo)
@@ -67,8 +73,12 @@ func main() {
 			break
 		}
 		for _, pr := range prlist {
-			if pr.Mergeable == nil || !*pr.Mergeable {
-				logrus.Infof("PR #%d/'%s' is not mergable: %s", *pr.ID, *pr.Title, *pr.MergeableState)
+			if pr.Mergeable != nil && !*pr.Mergeable {
+				logrus.Infof("PR #%d/'%s' is not mergable", *pr.ID, *pr.Title)
+				continue
+			}
+			if config.DryRun {
+				logrus.Infof("dry-run: would merge PR #%d/'%s'", *pr.ID, *pr.Title)
 				continue
 			}
 			res, _, err := client.PullRequests.Merge(ctx,
@@ -83,4 +93,21 @@ func main() {
 		logrus.Debugf("GetPR page: %d", opts.ListOptions.Page)
 		opts.ListOptions.Page += 1
 	}
+}
+
+// logTransport est une implémentation de http.RoundTripper qui journalise les requêtes sortantes.
+type logTransport struct {
+	Transport http.RoundTripper
+}
+
+// RoundTrip effectue la requête HTTP et journalise les détails.
+func (t *logTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	logrus.Debugf("Making API request to: %s %s\n", req.Method, req.URL)
+	resp, err := t.Transport.RoundTrip(req)
+	if err != nil {
+		logrus.Debugf("Error making request: %v\n", err)
+		return nil, err
+	}
+	logrus.Debugf("Received API response with status: %s\n", resp.Status)
+	return resp, nil
 }

@@ -14,6 +14,7 @@ type Config struct {
 	GithubRepo  string
 	GithubBase  string
 	Debug       bool
+	DryRun      bool
 }
 
 func NewConfig() *Config {
@@ -22,6 +23,7 @@ func NewConfig() *Config {
 	flag.StringVar(&(c.GithubRepo), "repo", os.Getenv("GITHUB_REPO"), "github repo")
 	flag.StringVar(&(c.GithubBase), "base", os.Getenv("GITHUB_BASE"), "github base")
 	flag.BoolVar(&(c.Debug), "debug", boolVarOrDefault("LOGLEVEL_DEBUG", false), "debug")
+	flag.BoolVar(&(c.DryRun), "dryrun", boolVarOrDefault("GHPRAPPROVER_DRYRUN", false), "dry run")
 	flag.Parse()
 	assertString("^[\\w-]+$", c.GithubToken, "invalid or missing github token")
 	assertString("^[\\w-]+(/[\\w-]+)+$", c.GithubRepo, "invalid or missing github repo")
