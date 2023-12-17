@@ -10,7 +10,7 @@ WORKDIR /go/src/github.com/nvalembois/gh-pr-auto-approver
 RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
     go build \
     -ldflags="-s -w" \
-    -o gh-pr-auto-approver .
+    -o gh-pr-auto-approver cmd/gh-pr-auto-approver.go
 
 FROM scratch
 COPY --from=build /go/src/github.com/nvalembois/gh-pr-auto-approver/gh-pr-auto-approver /gh-pr-auto-approver
