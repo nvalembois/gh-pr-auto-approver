@@ -26,12 +26,12 @@ jobs:
       - 
         name: Checkout
         uses: actions/checkout@v4
-      # - 
-      #   name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v3  # https://github.com/docker/setup-qemu-action
-      # - 
-      #   name: Set up Docker
-      #   uses: docker/setup-buildx-action@v3  # https://github.com/docker/setup-buildx-action
+      - 
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3  # https://github.com/docker/setup-qemu-action
+      - 
+        name: Set up Docker
+        uses: docker/setup-buildx-action@v3  # https://github.com/docker/setup-buildx-action
       - name: Extract GO_VERSION
         id: extract
         run: |
@@ -51,6 +51,7 @@ jobs:
           tags: ${{ github.ref_name }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          no-cache: true
           build-args: GO_VERSION=${{ steps.extract.outputs.go_version }}
 
 
