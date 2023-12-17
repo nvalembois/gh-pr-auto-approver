@@ -72,20 +72,25 @@ func main() {
 		if len(prlist) == 0 {
 			break
 		}
-		for _, pr := range prlist {
-			if pr.Mergeable != nil && !*pr.Mergeable {
-				logrus.Infof("PR #%d/'%s' is not mergable", *pr.ID, *pr.Title)
+		for _, tmppr := range prlist {
+			pr, _, err := client.PullRequests.Get(ctx, user, reponame, *tmppr.Number)
+			if err != nil {
+				logrus.Errorf("Get PR #%d/%d/'%s' failed: %s", *tmppr.Number, *tmppr.ID, *tmppr.Title, err)
+				continue
+			}
+			if !pr.GetMergeable() {
+				logrus.Infof("PR #%d/%d/'%s' is not mergable", *pr.Number, *pr.ID, *pr.Title)
 				continue
 			}
 			if config.DryRun {
-				logrus.Infof("dry-run: would merge PR #%d/'%s'", *pr.ID, *pr.Title)
+				logrus.Infof("dry-run: would merge PR #%d/%d/'%s'", *pr.Number, *pr.ID, *pr.Title)
 				continue
 			}
 			res, _, err := client.PullRequests.Merge(ctx,
-				user, reponame, int(*pr.ID),
+				user, reponame, *pr.Number,
 				"Fusion automatique de la pull request", nil)
 			if err != nil {
-				logrus.Errorf("Merge PR #%d/'%s' failed: %s", *pr.ID, *pr.Title, err)
+				logrus.Errorf("Merge PR #%d/%d/'%s' failed: %s", *pr.Number, *pr.ID, *pr.Title, err)
 				continue
 			}
 			logrus.Infof("Merged PR #%d/'%s': %s", *pr.ID, *pr.Title, *res.Message)
