@@ -36,6 +36,7 @@ jobs:
       - name: Extract GO_VERSION
         id: extract
         run: |
+          cat Dockerfile
           if [ -f go.mod ]; then
             go_version=$(awk -F ' ' '$1 == "go" { print $2 }' go.mod)
             echo "go_version=${go_version}" >> $GITHUB_OUTPUT
