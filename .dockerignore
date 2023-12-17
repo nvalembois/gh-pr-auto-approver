@@ -1,0 +1,9 @@
+Dockerfile
+LICENSE
+README.md
+.DS_Store
+.git/
+.github/
+.gitignore
+.vscode/
+renovate.json

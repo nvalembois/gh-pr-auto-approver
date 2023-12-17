@@ -8,6 +8,11 @@ on:
     paths:
       - '.github/workflows/release.yml'
       - '.github/workflows/publish.yml'
+      - '**.go'
+      - 'go.mod'
+      - 'go.sum'
+      - '**.py'
+      - '**.py'
       - '**.py'
       - 'requirements.txt'
       - 'Dockerfile'
@@ -37,4 +42,5 @@ jobs:
         with:
           tag:  ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}        
+          body: ${{ steps.tag_version.outputs.changelog }}
+
