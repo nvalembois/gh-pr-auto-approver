@@ -45,15 +45,16 @@ jobs:
             echo 'go_version=' >> $GITHUB_OUTPUT
           fi
       - 
+        name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v4
+      - 
         name: Build
         uses: docker/build-push-action@v5  # https://github.com/docker/build-push-action
         with:
           push: false
           context: .
           platforms: linux/amd64,linux/arm64
-          tags: ${{ github.repository }}:${{ github.ref_name }}
+          tags: ${{ github.repository }}:${{ env.GITHUB_REF_SLUG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: GO_VERSION=${{ steps.extract.outputs.go_version }}
-
-
