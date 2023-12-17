@@ -1,4 +1,4 @@
-name: Publish released containers
+name: Test container builds
 
 on:
   push:
@@ -16,11 +16,10 @@ on:
 
 jobs:
 
-  publish:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
 
     steps:
       - 
@@ -37,9 +36,9 @@ jobs:
         run: |
           if [ -f go.mod ]; then
             go_version=$(awk -F ' ' '$1 == "go" { print $2 }' go.mod)
-            echo "::set-output name=go_version::${go_version}"
+            echo "go_version=${go_version}" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=go_version::"
+            echo 'go_version=' >> $GITHUB_OUTPUT
           fi
       - 
         name: Build
