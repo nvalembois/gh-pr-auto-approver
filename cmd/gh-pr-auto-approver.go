@@ -72,15 +72,23 @@ func main() {
 		if len(prlist) == 0 {
 			break
 		}
-		for _, tmppr := range prlist {
-			pr, _, err := client.PullRequests.Get(ctx, user, reponame, *tmppr.Number)
-			if err != nil {
-				logrus.Errorf("Get PR #%d/%d/'%s' failed: %s", *tmppr.Number, *tmppr.ID, *tmppr.Title, err)
-				continue
-			}
-			if !pr.GetMergeable() {
-				logrus.Infof("PR #%d/%d/'%s' is not mergable", *pr.Number, *pr.ID, *pr.Title)
-				continue
+		for _, pr := range prlist {
+			if pr.GetRebaseable() {
+				logrus.Debugf("PR #%d/%d/'%s' is Rebaseable", *pr.Number, *pr.ID, *pr.Title)
+				_, _, err := client.PullRequests.UpdateBranch(ctx, user, reponame, *pr.Number, nil)
+				if err != nil {
+					logrus.Errorf("Update PR #%d/%d/'%s' failed: %s", *pr.Number, *pr.ID, *pr.Title, err)
+					continue
+				}
+				tmppr, _, err := client.PullRequests.Get(ctx, user, reponame, *pr.Number)
+				if err != nil {
+					logrus.Errorf("Get PR #%d/%d/'%s' failed: %s", *pr.Number, *pr.ID, *pr.Title, err)
+					continue
+				}
+				if tmppr.GetRebaseable() {
+					logrus.Infof("PR #%d/%d/'%s' is still rebaseable", *pr.Number, *pr.ID, *pr.Title)
+					continue
+				}
 			}
 			if config.DryRun {
 				logrus.Infof("dry-run: would merge PR #%d/%d/'%s'", *pr.Number, *pr.ID, *pr.Title)
