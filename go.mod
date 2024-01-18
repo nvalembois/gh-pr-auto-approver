@@ -4,6 +4,7 @@ go 1.21.6
 
 require (
 	github.com/google/go-github/v57 v57.0.0
+	github.com/google/go-github/v58 v58.0.0
 	github.com/sirupsen/logrus v1.9.3
 )
 
