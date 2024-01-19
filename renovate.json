@@ -9,7 +9,12 @@
       "groupName": "githubCi"
     },
     {
-      "matchPackageNames": ["go", "golang"],
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["golang", "docker.io/library/golang"],
+      "groupName": "goVersion"
+    },
+    {
+      "matchDatasources": ["golang-version"],
       "groupName": "goVersion"
     },
     {
