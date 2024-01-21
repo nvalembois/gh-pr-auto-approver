@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/google/go-github/v57/github"
+	"github.com/google/go-github/v58/github"
 	"github.com/sirupsen/logrus"
 
 	"github.com/nvalembois/gh-pr-auto-approver/internal"
