@@ -73,12 +73,10 @@ func main() {
 		if len(prlist) == 0 {
 			break
 		}
+		lastMergedTime := time.Unix(0, 0)
 		for _, pr := range prlist {
-			rwlist, _, err := client.PullRequests.ListReviews(ctx, user, reponame, *pr.Number, nil)
-			if err != nil {
-				for _, rw := range rwlist {
-					logrus.Infof("PR #%d/%d '%s' Review #%d (%s) '%s'", *pr.Number, *pr.ID, *pr.Title, *rw.ID, *rw.State, *rw.Body)
-				}
+			if time.Since(lastMergedTime) < (30 * time.Second) {
+				time.Sleep((30 * time.Second) - time.Since(lastMergedTime))
 			}
 			if pr.GetRebaseable() {
 				logrus.Debugf("PR #%d/%d '%s' is Rebaseable", *pr.Number, *pr.ID, *pr.Title)
@@ -109,7 +107,7 @@ func main() {
 				continue
 			}
 			logrus.Infof("Merged PR #%d '%s': %s", *pr.ID, *pr.Title, *res.Message)
-			time.Sleep(30 * time.Second)
+			lastMergedTime = time.Now()
 		}
 		logrus.Debugf("GetPR page: %d", opts.ListOptions.Page)
 		opts.ListOptions.Page += 1
