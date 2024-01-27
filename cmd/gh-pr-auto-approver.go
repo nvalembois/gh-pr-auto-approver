@@ -9,7 +9,7 @@ import (
 	"github.com/google/go-github/v58/github"
 	"github.com/sirupsen/logrus"
 
-	"github.com/nvalembois/gh-pr-auto-approver/internal"
+	"github.com/nvalembois/gh-pr-auto-approver/pkg/config"
 )
 
 func main() {
@@ -18,7 +18,7 @@ func main() {
 	logrus.Infoln("gh-pr-approver: start")
 
 	// traitement des arguments de la ligne de commande
-	config := internal.NewConfig()
+	config := config.NewConfig()
 	if config.Debug {
 		logrus.SetLevel(logrus.DebugLevel)
 		logrus.Debug("Github Repo: ", config.GithubRepo)
@@ -54,7 +54,7 @@ func main() {
 		Direction:   "asc",
 		ListOptions: github.ListOptions{Page: 1, PerPage: 10}}
 	for {
-		if config.Debug {
+		if logrus.DebugLevel == logrus.GetLevel() {
 			logrus.Debugf("Query PR for '%s' with options:", config.GithubRepo)
 			logrus.Debugln("  State:", opts.State)
 			logrus.Debugln("  Head:", opts.Head)
@@ -73,35 +73,36 @@ func main() {
 			break
 		}
 		for _, pr := range prlist {
+
 			if pr.GetRebaseable() {
-				logrus.Debugf("PR #%d/%d/'%s' is Rebaseable", *pr.Number, *pr.ID, *pr.Title)
+				logrus.Debugf("PR #%d/%d '%s' is Rebaseable", *pr.Number, *pr.ID, *pr.Title)
 				_, _, err := client.PullRequests.UpdateBranch(ctx, user, reponame, *pr.Number, nil)
 				if err != nil {
-					logrus.Errorf("Update PR #%d/%d/'%s' failed: %s", *pr.Number, *pr.ID, *pr.Title, err)
+					logrus.Errorf("Update PR #%d/%d '%s' failed: %s", *pr.Number, *pr.ID, *pr.Title, err)
 					continue
 				}
 				tmppr, _, err := client.PullRequests.Get(ctx, user, reponame, *pr.Number)
 				if err != nil {
-					logrus.Errorf("Get PR #%d/%d/'%s' failed: %s", *pr.Number, *pr.ID, *pr.Title, err)
+					logrus.Errorf("Get PR #%d/%d '%s' failed: %s", *pr.Number, *pr.ID, *pr.Title, err)
 					continue
 				}
 				if tmppr.GetRebaseable() {
-					logrus.Infof("PR #%d/%d/'%s' is still rebaseable", *pr.Number, *pr.ID, *pr.Title)
+					logrus.Infof("PR #%d/%d '%s' is still rebaseable", *pr.Number, *pr.ID, *pr.Title)
 					continue
 				}
 			}
 			if config.DryRun {
-				logrus.Infof("dry-run: would merge PR #%d/%d/'%s'", *pr.Number, *pr.ID, *pr.Title)
+				logrus.Infof("dry-run: would merge PR #%d/%d '%s'", *pr.Number, *pr.ID, *pr.Title)
 				continue
 			}
 			res, _, err := client.PullRequests.Merge(ctx,
 				user, reponame, *pr.Number,
 				"Fusion automatique de la pull request", nil)
 			if err != nil {
-				logrus.Errorf("Merge PR #%d/%d/'%s' failed: %s", *pr.Number, *pr.ID, *pr.Title, err)
+				logrus.Errorf("Merge PR #%d/%d '%s' failed: %s", *pr.Number, *pr.ID, *pr.Title, err)
 				continue
 			}
-			logrus.Infof("Merged PR #%d/'%s': %s", *pr.ID, *pr.Title, *res.Message)
+			logrus.Infof("Merged PR #%d '%s': %s", *pr.ID, *pr.Title, *res.Message)
 		}
 		logrus.Debugf("GetPR page: %d", opts.ListOptions.Page)
 		opts.ListOptions.Page += 1
