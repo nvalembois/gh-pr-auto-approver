@@ -112,6 +112,7 @@ func main() {
 		logrus.Debugf("GetPR page: %d", opts.ListOptions.Page)
 		opts.ListOptions.Page += 1
 	}
+	logrus.Infoln("gh-pr-approver: end")
 }
 
 // logTransport est une implémentation de http.RoundTripper qui journalise les requêtes sortantes.
