@@ -33,7 +33,7 @@ jobs:
         name: Push Tag with new version
         if: github.ref_type != 'tag'
         id: tag_version
-        uses: mathieudutour/github-tag-action@v6.1 # https://github.com/mathieudutour/github-tag-action
+        uses: mathieudutour/github-tag-action@v6.2 # https://github.com/mathieudutour/github-tag-action
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - 
