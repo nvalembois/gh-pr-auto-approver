@@ -3,7 +3,6 @@ module github.com/nvalembois/gh-pr-auto-approver
 go 1.22.2
 
 require (
-	github.com/google/go-github/v61 v61.0.0
 	github.com/google/go-github/v62 v62.0.0
 	github.com/sirupsen/logrus v1.9.3
 )
