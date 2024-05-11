@@ -20,7 +20,6 @@
     {
       "matchDatasources": ["go"],
       "groupName": "goPackages",
-      "gomodUpdateImportPaths": true,
       "gomodTidy": true
     }
   ]
