@@ -19,7 +19,9 @@
     },
     {
       "matchDatasources": ["go"],
-      "groupName": "goPackages"
+      "groupName": "goPackages",
+      "gomodUpdateImportPaths": true,
+      "gomodTidy": true
     }
   ]
 }
