@@ -46,7 +46,7 @@ jobs:
           fi
       - 
         name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v5.0.0
+        uses: rlespinasse/github-slug-action@v5.1.0
       - 
         name: Build
         uses: docker/build-push-action@v6  # https://github.com/docker/build-push-action
