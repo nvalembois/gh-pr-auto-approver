@@ -1,9 +1,11 @@
 module github.com/nvalembois/gh-pr-auto-approver
 
-go 1.22.2
+go 1.23.0
+
+toolchain go1.24.2
 
 require (
-	github.com/google/go-github/v65 v65.0.0
+	github.com/google/go-github/v71 v71.0.0
 	github.com/sirupsen/logrus v1.9.3
 )
 
