@@ -6,22 +6,36 @@
   ],
   "packageRules": [
     {
-      "matchDatasources": ["github-tags", "github-runners"],
+      "matchDatasources": [
+        "github-tags",
+        "github-runners"
+      ],
       "groupName": "githubCi"
     },
     {
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["golang", "docker.io/library/golang"],
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "golang",
+        "docker.io/library/golang"
+      ],
       "groupName": "goVersion"
     },
     {
-      "matchDatasources": ["golang-version"],
+      "matchDatasources": [
+        "golang-version"
+      ],
       "groupName": "goVersion"
     },
     {
-      "matchDatasources": ["go"],
+      "matchDatasources": [
+        "go"
+      ],
       "groupName": "goPackages",
-      "gomodTidy": true
+      "postUpdateOptions": [
+        "gomodTidy"
+      ]
     }
   ]
 }
