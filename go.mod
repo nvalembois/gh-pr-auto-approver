@@ -2,7 +2,7 @@ module github.com/nvalembois/gh-pr-auto-approver
 
 go 1.23.0
 
-toolchain go1.26.2
+toolchain go1.26.3
 
 require (
 	github.com/google/go-github/v71 v71.0.0
