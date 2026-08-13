@@ -6,7 +6,7 @@ toolchain go1.26.5
 
 require (
 	github.com/google/go-github/v71 v71.0.0
-	github.com/sirupsen/logrus v1.9.4
+	github.com/sirupsen/logrus v1.10.0
 )
 
 require (
