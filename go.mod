@@ -1,15 +1,16 @@
 module github.com/nvalembois/gh-pr-auto-approver
 
-go 1.23.0
+go 1.26.0
 
 toolchain go1.27.1
 
 require (
 	github.com/google/go-github/v71 v71.0.0
+	github.com/google/go-github/v91 v91.0.0
 	github.com/sirupsen/logrus v1.10.2
 )
 
 require (
-	github.com/google/go-querystring v1.1.0 // indirect
+	github.com/google/go-querystring v1.2.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
 )
