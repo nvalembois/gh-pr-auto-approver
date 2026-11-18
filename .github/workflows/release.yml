@@ -28,12 +28,12 @@ jobs:
     steps:
       - 
         name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - 
         name: Push Tag with new version
         if: github.ref_type != 'tag'
         id: tag_version
-        uses: mathieudutour/github-tag-action@v6.2 # https://github.com/mathieudutour/github-tag-action
+        uses: mathieudutour/github-tag-action@v7.0.0 # https://github.com/mathieudutour/github-tag-action
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - 
